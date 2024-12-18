@@ -1,6 +1,6 @@
-import { postService } from "./services/products.service.js";
 import express from "express";
-import { __dirname } from "./dirname.js";
+import { productsRouter } from "./routes/products.router.js";
+import {cartsRouter} from "./routes/carts.router.js";
 
 const app = express();
 const PORT = 8080;
@@ -9,72 +9,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+app.use("/api/products", productsRouter);
+app.use("/api/carts", cartsRouter);
 
-app.get("/api/posts", async (req, res) => {
-  const posts = await postService.getAll();
-
-  res.status(200).json(posts);
-});
-
-app.get("/api/posts/:id", async (req, res) => {
-  const { id } = req.params;
-
-  const post = await postService.getById({ id });
-
-  if (!post) {
-    return res.status(404).json({ message: "Post not found" });
-  }
-
-  res.status(200).json(post);
-});
-
-app.post("/api/posts", async (req, res) => {
-  const { title, content, description } = req.body;
-
-  try {
-    const post = await postService.create({ title, content, description });
-
-    res.status(201).json(post);
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-app.put("/api/posts/:id", async (req, res) => {
-  const { id } = req.params;
-
-  const { title, content, description } = req.body;
-
-  try {
-    const post = await postService.update({ id, title, content, description });
-
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
-
-    res.status(200).json(post);
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-app.delete("/api/posts/:id", async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const post = await postService.delete({ id });
-
-    if (!post) {
-      return res.status(404).json({ message: "Post not found" });
-    }
-
-    res.status(200).json({ post });
-  } catch (error) {
-    res.status(500).json({ message: "Internal server error" });
-  }
+app.use((err, req, res, next) => {
+  console.error("Error:", err.message);
+  res.status(500).json({ error: "Ocurrió un error interno en el servidor" });
 });
 
 
 app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+  console.log(`✅ Servidor ejecutándose en http://localhost:${PORT}`);
+  console.log(`📌 Endpoints:
+    - Productos: http://localhost:${PORT}/api/products
+    - Carritos: http://localhost:${PORT}/api/carts`);
 });
