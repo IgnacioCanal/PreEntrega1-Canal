@@ -1,9 +1,8 @@
 // productRoutes.js
 import { Router } from "express";
-import productsService from "../services/products.service.js";
+import { productsService } from "../services/products.service.js";
 
 export const productsRouter = Router();
-const productsService = new ProductsService();
 
 productsRouter.get("/", async (req, res) => {
   try {
