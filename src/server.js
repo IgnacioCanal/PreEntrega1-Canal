@@ -1,11 +1,13 @@
-import { postService } from "./services/post.service.js";
+import { postService } from "./services/products.service.js";
 import express from "express";
+import { __dirname } from "./dirname.js";
 
 const app = express();
 const PORT = 8080;
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static("public"));
 
 
 app.get("/api/posts", async (req, res) => {
