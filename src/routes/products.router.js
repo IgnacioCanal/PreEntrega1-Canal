@@ -3,6 +3,24 @@ import { productsService } from "../services/products.service.js";
 
 export const productsRouter = Router();
 
+const validateProductFields = (product) => {
+  const { nombre, descripcion, stock, codigo, categoria, precio, status } = product;
+  
+  if (!nombre || !descripcion || !codigo || !categoria || precio === undefined || stock === undefined) {
+    return { valid: false, message: "Todos los campos son obligatorios excepto thumbnails" };
+  }
+  
+  if (typeof precio !== 'number' || typeof stock !== 'number') {
+    return { valid: false, message: "Precio y stock deben ser números" };
+  }
+  
+  if (status !== undefined && typeof status !== 'boolean') {
+    return { valid: false, message: "Status debe ser un valor booleano" };
+  }
+  
+  return { valid: true };
+};
+
 productsRouter.get("/", async (req, res) => {
   try {
     const products = await productsService.getAll();
@@ -29,6 +47,12 @@ productsRouter.get("/:productId", async (req, res) => {
 
 productsRouter.post("/", async (req, res) => {
   const newProduct = req.body;
+  const validation = validateProductFields(newProduct);
+
+  if (!validation.valid) {
+    return res.status(400).json({ error: validation.message });
+  }
+
   try {
     const createdProduct = await productsService.create(newProduct);
     res.status(201).json(createdProduct);
@@ -42,6 +66,12 @@ productsRouter.post("/", async (req, res) => {
 productsRouter.put("/:productId", async (req, res) => {
   const { productId } = req.params;
   const updatedProduct = req.body;
+  const validation = validateProductFields(updatedProduct);
+
+  if (!validation.valid && updatedProduct.productId === undefined) {
+    return res.status(400).json({ error: validation.message });
+  }
+
   try {
     const product = await productsService.update(productId, updatedProduct);
     if (!product) {

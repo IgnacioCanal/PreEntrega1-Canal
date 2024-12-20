@@ -5,6 +5,11 @@ export const cartsRouter = Router();
 
 const cartService = new CartService();
 
+const validateCartProduct = async (productId) => {
+  const product = await productsService.getById(productId);
+  return product !== null;
+};
+
 cartsRouter.get("/", async (req, res) => {
   try {
     const carts = await cartService.getAllCarts();
@@ -38,6 +43,11 @@ cartsRouter.post("/", async (req, res) => {
 
 cartsRouter.post("/:cartId/products/:productId", async (req, res) => {
   const { cartId, productId } = req.params;
+
+  if (!await validateCartProduct(productId)) {
+    return res.status(400).json({ error: "Producto no encontrado" });
+  }
+
   try {
     const updatedCart = await cartService.addProductToCart(cartId, productId);
     res.json(updatedCart);
