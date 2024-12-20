@@ -193,18 +193,5 @@
       "images/alfombra1.jpg",
       "images/alfombra2.jpg"
     ]
-  },
-  {
-    "productId": "040c95ff-cae9-4364-806c-56068b4c9a33",
-    "nombre": 1,
-    "descripcion": "Descripción del producto nuevo",
-    "stock": 10,
-    "codigo": "P001",
-    "categoria": "Categoría nueva",
-    "precio": 100,
-    "thumbnails": [
-      "url1",
-      "url2"
-    ]
   }
 ]

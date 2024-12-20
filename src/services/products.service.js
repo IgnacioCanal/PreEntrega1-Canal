@@ -1,8 +1,7 @@
 import fs from "node:fs";
-import path from 'node:path';
+import path from "node:path";
 import { v4 as uuid } from "uuid";
 import { __dirname } from "../dirname.js";
-
 
 const productsFilePath = path.resolve(__dirname, "./db/products.json");
 class ProductsService {
@@ -42,8 +41,10 @@ class ProductsService {
    *
    * @returns { Object } - Devuelve el producto con el id pasado por parámetro
    */
-  async getById( productId ) {
-    const product = this.products.find((product) => product.productId === productId);
+  async getById(productId) {
+    const product = this.products.find(
+      (product) => product.productId === productId
+    );
     return product;
   }
 
@@ -71,8 +72,10 @@ class ProductsService {
     }
   }
 
-  async update(productId, { nombre, descripcion, stock, codigo, categoria, precio, thumbnails }) {
-    const product = this.products.find((product) => product.productId === productId);
+  async update( productId,{ nombre, descripcion, stock, codigo, categoria, precio, thumbnails } ) {
+    const product = this.products.find(
+      (product) => product.productId === productId
+    );
 
     if (!product) {
       return null;
@@ -86,7 +89,9 @@ class ProductsService {
     product.precio = precio ?? product.precio;
     product.thumbnails = thumbnails ?? product.thumbnails;
 
-    const index = this.products.findIndex((product) => product.productId === productId);
+    const index = this.products.findIndex(
+      (product) => product.productId === productId
+    );
     this.products[index] = product;
 
     try {
@@ -98,16 +103,17 @@ class ProductsService {
     }
   }
 
-
   async delete(productId) {
-    const index = this.products.findIndex((product) => product.productId === productId);
-  
+    const index = this.products.findIndex(
+      (product) => product.productId === productId
+    );
+
     if (index === -1) {
       return null;
     }
-  
+
     const [deletedProduct] = this.products.splice(index, 1);
-  
+
     try {
       await this.saveOnFile();
       return deletedProduct;
@@ -115,7 +121,8 @@ class ProductsService {
       console.error("Error al borrar el producto:", error);
       throw new Error("Error al borrar el producto");
     }
-  }  async saveOnFile() {
+  }
+  async saveOnFile() {
     try {
       await fs.promises.writeFile(
         this.path,

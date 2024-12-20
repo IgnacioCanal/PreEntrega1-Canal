@@ -11,7 +11,7 @@ export class CartService {
 
     const newCart = {
       cartId: uuid(),
-      products: []
+      products: [],
     };
 
     carts.push(newCart);
@@ -35,7 +35,7 @@ export class CartService {
     if (!cart) {
       throw new Error("Carrito no encontrado");
     }
-   
+
     const product = cart.products.find((p) => p.productId === productId);
     if (product) {
       product.quantity += 1;
@@ -60,7 +60,6 @@ export class CartService {
     await this._writeCartsFile(carts);
     return cart;
   }
-
 
   async _readCartsFile() {
     try {

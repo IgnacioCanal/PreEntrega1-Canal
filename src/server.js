@@ -1,6 +1,6 @@
 import express from "express";
 import { productsRouter } from "./routes/products.router.js";
-import {cartsRouter} from "./routes/carts.router.js";
+import { cartsRouter } from "./routes/carts.router.js";
 
 const app = express();
 const PORT = 8080;
@@ -16,7 +16,6 @@ app.use((err, req, res, next) => {
   console.error("Error:", err.message);
   res.status(500).json({ error: "Ocurrió un error interno en el servidor" });
 });
-
 
 app.listen(PORT, () => {
   console.log(`✅ Servidor ejecutándose en http://localhost:${PORT}`);
