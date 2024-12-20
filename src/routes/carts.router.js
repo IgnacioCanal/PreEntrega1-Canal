@@ -5,10 +5,19 @@ export const cartsRouter = Router();
 
 const cartService = new CartService();
 
-cartsRouter.get("/:cid", async (req, res) => {
-  const { cid } = req.params;
+cartsRouter.get("/", async (req, res) => {
   try {
-    const cart = await cartService.getCartById(cid);
+    const carts = await cartService.getAllCarts();
+    res.json(carts);
+  } catch (error) {
+    res.status(500).json({ error: "Error al obtener los carritos" });
+  }
+});
+
+cartsRouter.get("/:cartId", async (req, res) => {
+  const { cartId } = req.params;
+  try {
+    const cart = await cartService.getCartById(cartId);
     if (!cart) {
       return res.status(404).json({ error: "Carrito no encontrado" });
     }
@@ -24,6 +33,26 @@ cartsRouter.post("/", async (req, res) => {
     res.status(201).json(newCart);
   } catch (error) {
     res.status(500).json({ error: "Error al crear el carrito" });
+  }
+});
+
+cartsRouter.post("/:cartId/products/:productId", async (req, res) => {
+  const { cartId, productId } = req.params;
+  try {
+    const updatedCart = await cartService.addProductToCart(cartId, productId);
+    res.json(updatedCart);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+cartsRouter.delete("/:cid/products/:pid", async (req, res) => {
+  const { cartId, productId } = req.params;
+  try {
+    const updatedCart = await cartService.removeProductFromCart(cartId, productId);
+    res.json(updatedCart);
+  } catch (error) {
+    res.status(500).json({ error: "Error al eliminar el producto del carrito" });
   }
 });
 

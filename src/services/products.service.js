@@ -3,8 +3,8 @@ import path from 'node:path';
 import { v4 as uuid } from "uuid";
 import { __dirname } from "../dirname.js";
 
-const productsFilePath = path.join(__dirname, 'products.json');
 
+const productsFilePath = path.resolve(__dirname, "./db/products.json");
 class ProductsService {
   path;
   products;
@@ -20,6 +20,7 @@ class ProductsService {
       try {
         this.products = JSON.parse(fs.readFileSync(this.path, "utf-8"));
       } catch (error) {
+        console.error("Error al leer el archivo de productos:", error);
         this.products = [];
       }
     } else {
@@ -37,20 +38,20 @@ class ProductsService {
 
   /**
    *
-   * @param { id } id - Id del posteo a buscar
+   * @param { productId } productId - Id del posteo a buscar
    *
    * @returns { Object } - Devuelve el producto con el id pasado por parámetro
    */
-  async getById({ id }) {
-    const product = this.products.find((product) => product.id === id);
+  async getById( productId ) {
+    const product = this.products.find((product) => product.productId === productId);
     return product;
   }
 
   async create({ nombre, descripcion, stock, codigo, categoria, precio, thumbnails }) {
-    const id = uuid();
+    const productId = uuid();
 
     const product = {
-      id,
+      productId,
       nombre,
       descripcion,
       stock,
@@ -59,21 +60,19 @@ class ProductsService {
       precio,
       thumbnails,
     };
-    this.products.push(post);
+    this.products.push(product);
 
     try {
       await this.saveOnFile();
-
       return product;
     } catch (error) {
-      console.log(error);
-
-      console.error("Error al guardar el archivo");
+      console.error("Error al guardar el producto:", error);
+      throw new Error("Error guardando el producto");
     }
   }
 
-  async update({ nombre, descripcion, stock, codigo, categoria, precio, thumbnails }, id) {
-    const product = this.products.find((product) => product.id === id);
+  async update(productId, { nombre, descripcion, stock, codigo, categoria, precio, thumbnails }) {
+    const product = this.products.find((product) => product.productId === productId);
 
     if (!product) {
       return null;
@@ -87,53 +86,48 @@ class ProductsService {
     product.precio = precio ?? product.precio;
     product.thumbnails = thumbnails ?? product.thumbnails;
 
-    const index = this.products.findIndex((product) => product.id === id);
-
+    const index = this.products.findIndex((product) => product.productId === productId);
     this.products[index] = product;
 
     try {
       await this.saveOnFile();
-
       return product;
     } catch (error) {
-      console.error("Error al actualizar el archivo");
+      console.error("Error al actualizar el producto:", error);
+      throw new Error("Error al actualizar el producto");
     }
   }
 
 
-  async delete({ id }) {
-    const product = this.products.find((product) => product.id === id);
-
-    if (!product) {
+  async delete(productId) {
+    const index = this.products.findIndex((product) => product.productId === productId);
+  
+    if (index === -1) {
       return null;
     }
-
-    const index = this.products.findIndex((product) => product.id === id);
-
-    this.products.splice(index, 1);
-
+  
+    const [deletedProduct] = this.products.splice(index, 1);
+  
     try {
       await this.saveOnFile();
-
-      return product;
+      return deletedProduct;
     } catch (error) {
-      console.error("Error al eliminar el archivo");
+      console.error("Error al borrar el producto:", error);
+      throw new Error("Error al borrar el producto");
     }
-  }
-  async saveOnFile() {
+  }  async saveOnFile() {
     try {
       await fs.promises.writeFile(
         this.path,
         JSON.stringify(this.products, null, 2)
       );
     } catch (error) {
-      console.log(error);
-
-      console.error("Error al guardar el archivo");
+      console.error("Error al guardar el archivo:", error);
+      throw new Error("Error al guardar el archivo");
     }
   }
 }
 
 export const productsService = new ProductsService({
-  path: "./src/db/products.json",
+  path: productsFilePath,
 });

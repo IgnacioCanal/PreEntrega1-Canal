@@ -3,14 +3,14 @@ import path from "node:path";
 import { v4 as uuid } from "uuid";
 import { __dirname } from "../dirname.js";
 
-const cartsFilePath = path.join(__dirname, "data", "carts.json");
+const cartsFilePath = path.resolve(__dirname, "./db/carts.json");
 
 export class CartService {
   async createCart() {
     const carts = await this._readCartsFile();
 
     const newCart = {
-      id: uuidv4(),
+      cartId: uuid(),
       products: []
     };
 
@@ -21,17 +21,21 @@ export class CartService {
   }
   async getCartById(cartId) {
     const carts = await this._readCartsFile();
-    return carts.find((cart) => cart.id === cartId);
+    return carts.find((cart) => cart.cartId === cartId);
+  }
+
+  async getAllCarts() {
+    return await this._readCartsFile();
   }
 
   async addProductToCart(cartId, productId) {
     const carts = await this._readCartsFile();
-    const cart = carts.find((cart) => cart.id === cartId);
+    const cart = carts.find((cart) => cart.cartId === cartId);
 
     if (!cart) {
       throw new Error("Carrito no encontrado");
     }
-
+   
     const product = cart.products.find((p) => p.productId === productId);
     if (product) {
       product.quantity += 1;
@@ -42,6 +46,21 @@ export class CartService {
     await this._writeCartsFile(carts);
     return cart;
   }
+
+  async removeProductFromCart(cartId, productId) {
+    const carts = await this._readCartsFile();
+    const cart = carts.find((cart) => cart.cartId === cartId);
+
+    if (!cart) {
+      throw new Error("Carrito no encontrado");
+    }
+
+    cart.products = cart.products.filter((p) => p.productId !== productId);
+
+    await this._writeCartsFile(carts);
+    return cart;
+  }
+
 
   async _readCartsFile() {
     try {

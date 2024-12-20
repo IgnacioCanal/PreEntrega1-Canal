@@ -1,4 +1,3 @@
-// productRoutes.js
 import { Router } from "express";
 import { productsService } from "../services/products.service.js";
 
@@ -14,10 +13,10 @@ productsRouter.get("/", async (req, res) => {
   }
 });
 
-productsRouter.get("/:id", async (req, res) => {
-  const { id } = req.params;
+productsRouter.get("/:productId", async (req, res) => {
+  const { productId } = req.params;
   try {
-    const product = await productsService.getById(id);
+    const product = await productsService.getById(productId);
     if (!product) {
       return res.status(404).json({ error: "Producto no encontrado" });
     }
@@ -40,11 +39,11 @@ productsRouter.post("/", async (req, res) => {
 });
 
 
-productsRouter.put("/:id", async (req, res) => {
-  const { id } = req.params;
+productsRouter.put("/:productId", async (req, res) => {
+  const { productId } = req.params;
   const updatedProduct = req.body;
   try {
-    const product = await productsService.update(id, updatedProduct);
+    const product = await productsService.update(productId, updatedProduct);
     if (!product) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
@@ -55,10 +54,10 @@ productsRouter.put("/:id", async (req, res) => {
   }
 });
 
-productsRouter.delete("/:id", async (req, res) => {
-  const { id } = req.params;
+productsRouter.delete("/:productId", async (req, res) => {
+  const { productId } = req.params;
   try {
-    const productDeleted = await productsService.delete(id);
+    const productDeleted = await productsService.delete(productId);
     if (!productDeleted) {
       return res.status(404).json({ error: 'Producto no encontrado' });
     }
