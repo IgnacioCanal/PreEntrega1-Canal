@@ -1,25 +1,25 @@
 const socket = io();
 
-const pokemonList = document.getElementById("pokemons");
+const productsList = document.getElementById("products");
 
-socket.on("init", (pokemons) => {
-  pokemons.forEach((pokemon) => {
-    const li = createPokemon(pokemon);
-    pokemonList.appendChild(li);
+socket.on("init", (producs) => {
+  products.forEach((product) => {
+    const li = createProduct(product);
+    productList.appendChild(li);
   });
 });
 
-socket.on("new-pokemon", (pokemon) => {
-  const li = createPokemon(pokemon);
+socket.on("new-product", (product) => {
+  const li = createProduct(product);
   pokemonList.appendChild(li);
 });
 
-function createPokemon(pokemon) {
+function createProduct(product) {
   const li = document.createElement("li");
   li.innerHTML = `
-    <strong>${pokemon.name}</strong>: ${pokemon.type}
+    <strong>${product.nombre}</strong>: ${product.precio}
   `;
-  li.className = "collection-item";
+  li.className = "collection";
 
   return li;
 }

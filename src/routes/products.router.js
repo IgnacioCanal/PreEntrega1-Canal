@@ -1,7 +1,9 @@
 import { Router } from "express";
 import { productsService } from "../services/products.service.js";
+import { io } from "../server.js";
 
 export const productsRouter = Router();
+export const products = [];
 
 const validateProductFields = (product) => {
   const { nombre, descripcion, stock, codigo, categoria, precio, status } = product;
@@ -55,6 +57,7 @@ productsRouter.post("/", async (req, res) => {
 
   try {
     const createdProduct = await productsService.create(newProduct);
+    io.emit("nuevo-producto", createdProduct);
     res.status(201).json(createdProduct);
   } catch (error) {
     console.error("Error al crear el producto:", error.message);

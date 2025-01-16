@@ -1,19 +1,11 @@
 <h1>Lista de Productos</h1>
 
-<div class="row">
+<ul class="collection">
   {{#each products}}
-    <div class="col s12 m6 l4">
-      <div class="card">
-        <div class="card-image">
-          <img src="{{this.thumbnails}}" alt="{{this.nombre}}" />
-          <span class="card-title">{{this.nombre}}</span>
-        </div>
-        <div class="card-content">
-          <p>Precio: ${{this.precio}}</p>
-          <p>Categoría: {{this.categoria}}</p>
-          <p>Stock: {{this.stock}}</p>
-        </div>
-      </div>
-    </div>
+    <li class="collection-item">
+      {{this.nombre}}
+      -
+      {{this.precio}}
+    </li>
   {{/each}}
-</div>
+</ul>
