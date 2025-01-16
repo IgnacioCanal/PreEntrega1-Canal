@@ -6,7 +6,7 @@ import handlebars from "express-handlebars";
 import fs from "fs";
 
 import { __dirname } from "./dirname.js";
-import { productsRouter, productos } from "./routes/products.router.js";
+import { productsRouter } from "./routes/products.router.js";
 import { cartsRouter } from "./routes/carts.router.js";
 import { viewsRoutes } from "./routes/views.routes.js";
 
@@ -32,8 +32,8 @@ app.get('/products', (req, res) => {
     if (err) {
       return res.status(500).send('Error al cargar productos');
     }
-    const products = JSON.parse(data); // Parseamos el JSON
-    res.render('products', { products }); // Pasamos los productos a la vista
+    const products = JSON.parse(data);
+    res.render('products', { products });
   });
 });
 
