@@ -1,11 +1,25 @@
 <h1>Lista de Productos</h1>
 
-<ul class="collection">
+{{#if products.length}}
+  <div class="row">
   {{#each products}}
-    <li class="collection-item">
-      {{this.nombre}}
-      -
-      {{this.precio}}
-    </li>
+    <div class="col s12 m6 l4">
+      <div class="card">
+        <div class="card-title">
+          <p class="card-title">{{this.nombre}}</p>
+        </div>
+        <div class="card-content">
+          <p>Precio: ${{this.precio}}</p>
+          <p>Categoría: {{this.categoría}}</p>
+          <p>Stock: {{this.stock}}</p>
+        </div>
+        <div class="card-action">
+          <a href="#">Agregar al carrito</a>
+        </div>
+      </div>
+    </div>
   {{/each}}
-</ul>
+</div>
+{{else}}
+  <p>No hay productos disponibles.</p>
+{{/if}}

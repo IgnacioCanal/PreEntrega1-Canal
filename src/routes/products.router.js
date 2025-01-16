@@ -3,7 +3,7 @@ import { productsService } from "../services/products.service.js";
 import { io } from "../server.js";
 
 export const productsRouter = Router();
-export const products = [];
+
 
 const validateProductFields = (product) => {
   const { nombre, descripcion, stock, codigo, categoria, precio, status } = product;

@@ -1,25 +1,30 @@
 const socket = io();
 
-const productsList = document.getElementById("products");
 
-socket.on("init", (producs) => {
+socket.on('actualizarProductos', (products) => {
+  const lista = document.getElementById('lista-productos');
+  lista.innerHTML = '';
   products.forEach((product) => {
-    const li = createProduct(product);
-    productList.appendChild(li);
+    const item = document.createElement('li');
+    item.textContent = `Nombre:${product.nombre} - Precio $${product.precio} - Stock: ${product.stock}`;
+    lista.appendChild(item);
   });
 });
 
-socket.on("new-product", (product) => {
-  const li = createProduct(product);
-  pokemonList.appendChild(li);
+
+document.getElementById('form-agregar').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById('nombre').value;
+  const precio = document.getElementById('precio').value;
+  const stock = document.getElementById('stock').value;
+  socket.emit('agregarProducto', { nombre, precio, stock, productId: uuid() });
+  e.target.reset();
 });
 
-function createProduct(product) {
-  const li = document.createElement("li");
-  li.innerHTML = `
-    <strong>${product.nombre}</strong>: ${product.precio}
-  `;
-  li.className = "collection";
 
-  return li;
-}
+document.getElementById('form-eliminar').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById('nombre-eliminar').value;
+  socket.emit('eliminarProducto', { nombre });
+  e.target.reset();
+});
