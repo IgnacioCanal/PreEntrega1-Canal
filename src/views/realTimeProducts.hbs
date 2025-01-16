@@ -1,0 +1,52 @@
+<h1>Productos en Tiempo Real</h1>
+<ul id="lista-productos">
+  {{#each productos}}
+    <li>{{this.nombre}} - ${{this.precio}}</li>
+  {{/each}}
+</ul>
+
+<h2>Agregar Producto</h2>
+<form id="form-agregar">
+  <input type="text" id="nombre" placeholder="Nombre" required />
+  <input type="number" id="precio" placeholder="Precio" required />
+  <button type="submit">Agregar</button>
+</form>
+
+<h2>Eliminar Producto</h2>
+<form id="form-eliminar">
+  <input type="text" id="nombre-eliminar" placeholder="Nombre" required />
+  <button type="submit">Eliminar</button>
+</form>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const socket = io();
+
+  // Escuchar actualizaciones de productos
+  socket.on('actualizarProductos', (productos) => {
+    const lista = document.getElementById('lista-productos');
+    lista.innerHTML = '';
+    productos.forEach((producto) => {
+      const item = document.createElement('li');
+      item.textContent = `${producto.nombre} - $${producto.precio}`;
+      lista.appendChild(item);
+    });
+  });
+
+  // Manejar envío del formulario de agregar
+  document.getElementById('form-agregar').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre').value;
+    const precio = document.getElementById('precio').value;
+    socket.emit('agregarProducto', { nombre, precio });
+    e.target.reset();
+  });
+
+  // Manejar envío del formulario de eliminar
+  document.getElementById('form-eliminar').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const nombre = document.getElementById('nombre-eliminar').value;
+    socket.emit('eliminarProducto', { nombre });
+    e.target.reset();
+  });
+</script>
