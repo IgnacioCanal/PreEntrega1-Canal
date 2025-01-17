@@ -70,6 +70,30 @@ class ProductsService {
       console.error("Error al guardar el producto:", error);
       throw new Error("Error guardando el producto");
     }
+    
+  }
+
+  async addProduct ({nombre, precio, stock}){
+    if(!nombre || !precio || !stock){
+      throw new Error("Faltan datos obligatorios: nombre, precio o stock")
+    }
+    const productId = uuid();
+    const newProduct = {
+      productId,
+      nombre,
+      precio: parseFloat(precio), 
+      stock: parseInt(stock, 10),
+    };
+  
+    this.products.push(newProduct);
+  
+    try {
+      await this.saveOnFile();
+      return newProduct;
+    } catch (error) {
+      console.error("Error al guardar el producto básico:", error);
+      throw new Error("Error guardando el producto básico");
+    }
   }
 
   async update( productId,{ nombre, descripcion, stock, codigo, categoria, precio, thumbnails } ) {
@@ -120,6 +144,21 @@ class ProductsService {
     } catch (error) {
       console.error("Error al borrar el producto:", error);
       throw new Error("Error al borrar el producto");
+    }
+  }
+
+  async deleteProduct (nombre) {
+    const index = this.products.findIndex((product) => product.nombre === nombre);
+    if (index === -1){
+      throw new Error("Producto no encontrado");
+    }
+    const [deletedProduct] = this.products.splice(index, 1);
+    try {
+      await this.saveOnFile();
+      return deletedProduct;
+    } catch (error) {
+      console.error("Error al borrar el producto básico:", error);
+      throw new Error("Error al borrar el producto básico");
     }
   }
   async saveOnFile() {

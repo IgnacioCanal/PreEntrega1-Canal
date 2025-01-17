@@ -40,24 +40,31 @@ const server = createServer(app);
 export const io = new Server(server);
 
 io.on("connection", (socket) => {
-  console.log("New client connected:", socket.id);
+  console.log("Nuevo cliente conectado:", socket.id);
+  
+  socket.emit("init", productsService.getAll());
 
-  const productos = productsService.getAll();
-  console.log("Productos enviados:", productos)
-  socket.emit("actualizarProductos", productos);
-
-
-  socket.on("agregarProducto", (producto) => {
-    productsService.addProduct(producto);
-    io.emit("actualizarProductos", productsService.getAll());
+  socket.on("agregarProducto", async (product) => {
+    try {
+      await productsService.addProduct(product);
+      io.emit("actualizarProductos", await productsService.getAll());
+    } catch (error) {
+      console.error("Error al agregar producto:", error.message);
+      socket.emit("error", error.message);
+    }
   });
 
-
-  socket.on("eliminarProducto", (producto) => {
-    productsService.deleteProduct(producto.nombre);
-    io.emit("actualizarProductos", productsService.getAll());
+  socket.on("eliminarProducto", async ({ nombre }) => {
+    try {
+      await productsService.deleteProduct(nombre);
+      io.emit("actualizarProductos", await productsService.getAll());
+    } catch (error) {
+      console.error("Error al eliminar producto:", error.message);
+      socket.emit("error", error.message);
+    }
   });
 });
+
 
 // Iniciar servidor
 server.listen(8080, () => {

@@ -15,9 +15,15 @@ socket.on('actualizarProductos', (products) => {
 document.getElementById('form-agregar').addEventListener('submit', (e) => {
   e.preventDefault();
   const nombre = document.getElementById('nombre').value;
-  const precio = document.getElementById('precio').value;
-  const stock = document.getElementById('stock').value;
-  socket.emit('agregarProducto', { nombre, precio, stock, productId: uuid() });
+  const precio = parseFloat(document.getElementById('precio').value);
+  const stock = parseInt(document.getElementById('stock').value, 10);
+
+  if (!nombre || isNaN(precio) || isNaN(stock)) {
+    alert('Por favor, completa todos los campos correctamente.');
+    return;
+  }
+
+  socket.emit('agregarProducto', { nombre, precio, stock });
   e.target.reset();
 });
 
@@ -25,6 +31,10 @@ document.getElementById('form-agregar').addEventListener('submit', (e) => {
 document.getElementById('form-eliminar').addEventListener('submit', (e) => {
   e.preventDefault();
   const nombre = document.getElementById('nombre-eliminar').value;
+  if (!nombre) {
+    alert('Por favor, ingresa el nombre del producto a eliminar.');
+    return;
+  }
   socket.emit('eliminarProducto', { nombre });
   e.target.reset();
 });
