@@ -6,30 +6,33 @@ import { Server } from "socket.io";
 import handlebars from "express-handlebars";
 import fs from "fs";
 
-
 import { __dirname } from "./dirname.js";
 import { productsRouter } from "./routes/products.router.js";
 import { productsService } from "./services/products.service.js";
 import { cartsRouter } from "./routes/carts.router.js";
 import { viewsRoutes } from "./routes/views.routes.js";
 
-
 const app = express();
-
 
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, "../public")));
 
-app.engine('hbs', handlebars.engine({ extname: '.hbs', defaultLayout: 'main', layoutsDir: path.join(__dirname, 'views', 'layout') }));
-app.set('view engine', 'hbs');
-app.set('views', path.join(__dirname, 'views'));
+app.engine(
+  "hbs",
+  handlebars.engine({
+    extname: ".hbs",
+    layoutsDir: path.join(__dirname, "views", "layout"),
+    partialsDir: path.join(__dirname, "views", "partials"),
+  })
+);
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "views"));
 
 app.use("/", viewsRoutes);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
-
 
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);
@@ -41,7 +44,7 @@ export const io = new Server(server);
 
 io.on("connection", (socket) => {
   console.log("Nuevo cliente conectado:", socket.id);
-  
+
   socket.emit("init", productsService.getAll());
 
   socket.on("agregarProducto", async (product) => {
@@ -64,7 +67,6 @@ io.on("connection", (socket) => {
     }
   });
 });
-
 
 // Iniciar servidor
 server.listen(8080, () => {

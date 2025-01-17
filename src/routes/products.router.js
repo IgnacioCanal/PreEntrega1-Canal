@@ -4,22 +4,32 @@ import { io } from "../server.js";
 
 export const productsRouter = Router();
 
-
 const validateProductFields = (product) => {
-  const { nombre, descripcion, stock, codigo, categoria, precio, status } = product;
-  
-  if (!nombre || !descripcion || !codigo || !categoria || precio === undefined || stock === undefined) {
-    return { valid: false, message: "Todos los campos son obligatorios excepto thumbnails" };
+  const { nombre, descripcion, stock, codigo, categoria, precio, status } =
+    product;
+
+  if (
+    !nombre ||
+    !descripcion ||
+    !codigo ||
+    !categoria ||
+    precio === undefined ||
+    stock === undefined
+  ) {
+    return {
+      valid: false,
+      message: "Todos los campos son obligatorios excepto thumbnails",
+    };
   }
-  
-  if (typeof precio !== 'number' || typeof stock !== 'number') {
+
+  if (typeof precio !== "number" || typeof stock !== "number") {
     return { valid: false, message: "Precio y stock deben ser números" };
   }
-  
-  if (status !== undefined && typeof status !== 'boolean') {
+
+  if (status !== undefined && typeof status !== "boolean") {
     return { valid: false, message: "Status debe ser un valor booleano" };
   }
-  
+
   return { valid: true };
 };
 
@@ -65,7 +75,6 @@ productsRouter.post("/", async (req, res) => {
   }
 });
 
-
 productsRouter.put("/:productId", async (req, res) => {
   const { productId } = req.params;
   const updatedProduct = req.body;
@@ -78,12 +87,12 @@ productsRouter.put("/:productId", async (req, res) => {
   try {
     const product = await productsService.update(productId, updatedProduct);
     if (!product) {
-      return res.status(404).json({ error: 'Producto no encontrado' });
+      return res.status(404).json({ error: "Producto no encontrado" });
     }
     res.status(200).json(product);
   } catch (error) {
-    console.error('Error al actualizar el producto:', error.message);
-    res.status(500).json({ error: "Error al subir el producto"});
+    console.error("Error al actualizar el producto:", error.message);
+    res.status(500).json({ error: "Error al subir el producto" });
   }
 });
 
@@ -92,11 +101,11 @@ productsRouter.delete("/:productId", async (req, res) => {
   try {
     const productDeleted = await productsService.delete(productId);
     if (!productDeleted) {
-      return res.status(404).json({ error: 'Producto no encontrado' });
+      return res.status(404).json({ error: "Producto no encontrado" });
     }
-    res.status(200).json({ message: 'Producto eliminado con éxito' });
+    res.status(200).json({ message: "Producto eliminado con éxito" });
   } catch (error) {
-    console.error('Error al eliminar el producto:', error.message);
-    res.status(500).json({ error: 'Error al eliminar el producto' });
+    console.error("Error al eliminar el producto:", error.message);
+    res.status(500).json({ error: "Error al eliminar el producto" });
   }
 });

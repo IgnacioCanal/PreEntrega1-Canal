@@ -2,24 +2,24 @@
 
 {{#if products.length}}
   <div class="row">
-  {{#each products}}
-    <div class="col s12 m6 l4">
-      <div class="card">
-        <div class="card-title">
-          <p class="card-title">{{this.nombre}}</p>
-        </div>
-        <div class="card-content">
-          <p>Precio: ${{this.precio}}</p>
-          <p>Categoría: {{this.categoría}}</p>
-          <p>Stock: {{this.stock}}</p>
-        </div>
-        <div class="card-action">
-          <a href="#">Agregar al carrito</a>
+    {{#each products}}
+      <div class="col s12 m6 l4">
+        <div class="card small">
+          <div class="card-title center-align bold">
+            <h4>{{this.nombre}}</h4>
+          </div>
+          <div class="card-content">
+            <p class="content-padding">Precio: ${{this.precio}}</p>
+            <p class="content-padding">Categoría: {{this.categoría}}</p>
+            <p class="content-padding">Stock: {{this.stock}}</p>
+          </div>
+          <div class="card-action center-align">
+            <a href="#" class="btn btn-custom hoverable">Agregar al carrito</a>
+          </div>
         </div>
       </div>
-    </div>
-  {{/each}}
-</div>
+    {{/each}}
+  </div>
 {{else}}
   <p>No hay productos disponibles.</p>
 {{/if}}

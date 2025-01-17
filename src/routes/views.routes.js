@@ -1,10 +1,9 @@
 import { Router } from "express";
 import { productsService } from "../services/products.service.js";
 
-
 export const viewsRoutes = Router();
 
-viewsRoutes.get("/", async(req, res) => {
+viewsRoutes.get("/", async (req, res) => {
   try {
     const products = await productsService.getAll();
 

@@ -48,7 +48,15 @@ class ProductsService {
     return product;
   }
 
-  async create({ nombre, descripcion, stock, codigo, categoria, precio, thumbnails }) {
+  async create({
+    nombre,
+    descripcion,
+    stock,
+    codigo,
+    categoria,
+    precio,
+    thumbnails,
+  }) {
     const productId = uuid();
 
     const product = {
@@ -70,23 +78,22 @@ class ProductsService {
       console.error("Error al guardar el producto:", error);
       throw new Error("Error guardando el producto");
     }
-    
   }
 
-  async addProduct ({nombre, precio, stock}){
-    if(!nombre || !precio || !stock){
-      throw new Error("Faltan datos obligatorios: nombre, precio o stock")
+  async addProduct({ nombre, precio, stock }) {
+    if (!nombre || !precio || !stock) {
+      throw new Error("Faltan datos obligatorios: nombre, precio o stock");
     }
     const productId = uuid();
     const newProduct = {
       productId,
       nombre,
-      precio: parseFloat(precio), 
+      precio: parseFloat(precio),
       stock: parseInt(stock, 10),
     };
-  
+
     this.products.push(newProduct);
-  
+
     try {
       await this.saveOnFile();
       return newProduct;
@@ -96,7 +103,10 @@ class ProductsService {
     }
   }
 
-  async update( productId,{ nombre, descripcion, stock, codigo, categoria, precio, thumbnails } ) {
+  async update(
+    productId,
+    { nombre, descripcion, stock, codigo, categoria, precio, thumbnails }
+  ) {
     const product = this.products.find(
       (product) => product.productId === productId
     );
@@ -147,9 +157,11 @@ class ProductsService {
     }
   }
 
-  async deleteProduct (nombre) {
-    const index = this.products.findIndex((product) => product.nombre === nombre);
-    if (index === -1){
+  async deleteProduct(nombre) {
+    const index = this.products.findIndex(
+      (product) => product.nombre === nombre
+    );
+    if (index === -1) {
       throw new Error("Producto no encontrado");
     }
     const [deletedProduct] = this.products.splice(index, 1);

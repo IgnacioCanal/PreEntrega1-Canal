@@ -44,7 +44,7 @@ cartsRouter.post("/", async (req, res) => {
 cartsRouter.post("/:cartId/products/:productId", async (req, res) => {
   const { cartId, productId } = req.params;
 
-  if (!await validateCartProduct(productId)) {
+  if (!(await validateCartProduct(productId))) {
     return res.status(400).json({ error: "Producto no encontrado" });
   }
 
@@ -59,9 +59,14 @@ cartsRouter.post("/:cartId/products/:productId", async (req, res) => {
 cartsRouter.delete("/:cartId/products/:productId", async (req, res) => {
   const { cartId, productId } = req.params;
   try {
-    const updatedCart = await cartService.removeProductFromCart( cartId, productId );
+    const updatedCart = await cartService.removeProductFromCart(
+      cartId,
+      productId
+    );
     res.json(updatedCart);
   } catch (error) {
-    res.status(500).json({ error: "Error al eliminar el producto del carrito" });
+    res
+      .status(500)
+      .json({ error: "Error al eliminar el producto del carrito" });
   }
 });
