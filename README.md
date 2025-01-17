@@ -2,7 +2,8 @@
 
 ## Descripción
 
-Preentrega1-CANAL es una aplicación para la gestión de productos y carritos de compras. Permite a los usuarios realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre productos y carritos. Esta aplicación está construida con Node.js y Express.
+Preentrega2-CANAL es una aplicación para la gestión de productos y carritos de compras. Permite a los usuarios realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre productos y carritos. Además, ofrece funcionalidades avanzadas como la visualización dinámica de productos con Handlebars (HBS), y la comunicación en tiempo real entre los usuarios mediante WebSockets y Socket.io. Con estas tecnologías, la aplicación se actualiza automáticamente en tiempo real, mejorando la experiencia del usuario sin necesidad de recargar la página. Todo esto está construido con Node.js, Express, WebSockets, y Socket.io, proporcionando una experiencia más dinámica y fluida en el manejo de productos y carritos de compra.
+
 
 ## Características
 
@@ -19,6 +20,22 @@ Preentrega1-CANAL es una aplicación para la gestión de productos y carritos de
   - Obtener detalles de un carrito específico.
   - Agregar productos a un carrito.
   - Eliminar productos de un carrito.
+
+
+### Nuevas Funcionalidades
+
+**Visualización Dinámica de Productos con Handlebars (HBS)**  
+- La aplicación utiliza Handlebars (HBS) para renderizar las vistas de productos de manera dinámica. Los productos se muestran de manera eficiente en el navegador, facilitando una experiencia interactiva.
+
+**WebSockets y Socket.io para Comunicación en Tiempo Real**  
+- Se implementó WebSocket y Socket.io para habilitar la actualización en tiempo real de la lista de productos, carritos y otros cambios, lo que permite a los usuarios recibir información sin tener que recargar la página.
+
+**Vistas Dinámicas con Handlebars**  
+- Las vistas de los productos y carritos ahora están renderizadas de manera eficiente con Handlebars (HBS), mejorando el rendimiento y la experiencia del usuario al interactuar con la tienda online.
+
+**Interacción en Tiempo Real**  
+- Gracias a Socket.io, los carritos y los productos se sincronizan en tiempo real. Cualquier cambio realizado por un usuario se refleja de inmediato en otros usuarios conectados.
+
 
 ## Endpoints
 
