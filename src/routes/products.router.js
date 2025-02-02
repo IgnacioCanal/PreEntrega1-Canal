@@ -34,12 +34,35 @@ const validateProductFields = (product) => {
 };
 
 productsRouter.get("/", async (req, res) => {
+  const { limit = 10, page = 1, sort, query } = req.query;
+  const options = {
+      limit: parseInt(limit),
+      skip: (parseInt(page) - 1) * parseInt(limit),
+      sort: sort ? { precio: sort === 'asc' ? 1 : -1 } : null
+  };
+
+  const filter = query ? { categoría: query } : {};
+
   try {
-    const products = await productsService.getAll();
-    res.status(200).json(products);
+      const products = await productsService.getAll(filter, options);
+      const totalProducts = await productsService.countDocuments(filter);
+      const totalPages = Math.ceil(totalProducts / limit);
+
+      res.status(200).json({
+          status: 'success',
+          payload: products,
+          totalPages,
+          prevPage: page > 1 ? parseInt(page) - 1 : null,
+          nextPage: page < totalPages ? parseInt(page) + 1 : null,
+          page: parseInt(page),
+          hasPrevPage: page > 1,
+          hasNextPage: page < totalPages,
+          prevLink: page > 1 ? `/api/products?limit=${limit}&page=${parseInt(page) - 1}&sort=${sort}&query=${query}` : null,
+          nextLink: page < totalPages ? `/api/products?limit=${limit}&page=${parseInt(page) + 1}&sort=${sort}&query=${query}` : null
+      });
   } catch (error) {
-    console.error("Error al obtener los productos:", error.message);
-    res.status(500).json({ error: "Error al obtener los productos" });
+      console.error("Error al obtener los productos:", error.message);
+      res.status(500).json({ error: "Error al obtener los productos" });
   }
 });
 
