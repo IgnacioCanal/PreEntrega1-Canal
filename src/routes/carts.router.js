@@ -103,7 +103,7 @@ cartsRouter.delete("/:cartId/products/:productId", async (req, res) => {
 cartsRouter.delete("/:cartId", async (req, res) => {
   const { cartId } = req.params;
   try {
-      const deletedCart = await cartService.deleteCart(cartyId);
+      const deletedCart = await cartService.deleteCart(cartId);
       res.json(deletedCart);
   } catch (error) {
       res.status(500).json({ error: "Error al eliminar el carrito" });
