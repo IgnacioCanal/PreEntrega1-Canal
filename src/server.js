@@ -4,7 +4,7 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
-import fs from "fs";
+import connectDB from "./config/mongodb.js";
 
 import { __dirname } from "./dirname.js";
 import { productsRouter } from "./routes/products.router.js";
@@ -72,3 +72,5 @@ io.on("connection", (socket) => {
 server.listen(8080, () => {
   console.log("Server running on port http://localhost:8080");
 });
+
+connectDB();
