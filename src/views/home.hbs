@@ -1,6 +1,7 @@
 <h1>Lista de Productos</h1>
 
 {{#if products.length}}
+  <p>Página {{page}} de {{totalPages}}</p>
   <div class="row">
     {{#each products}}
       <div class="col s12 m6 l4">
@@ -10,7 +11,7 @@
           </div>
           <div class="card-content">
             <p class="content-padding">Precio: ${{this.precio}}</p>
-            <p class="content-padding">Categoría: {{this.categoría}}</p>
+            <p class="content-padding">Categoría: {{this.categoria}}</p>
             <p class="content-padding">Stock: {{this.stock}}</p>
           </div>
           <div class="card-action center-align">
@@ -22,13 +23,23 @@
   </div>
 
   <div class="pagination">
-    {{#if hasPrevPage}}
-      <a href="{{prevLink}}" class="btn">Anterior</a>
+  {{#if hasPrevPage}}
+    <a href="{{prevLink}}" class="btn">Anterior</a>
+  {{/if}}
+
+  {{#each totalPages as |pageNumber|}}
+    {{#if (eq ../page pageNumber)}}
+      <a href="/api/products?limit=10&page={{pageNumber}}" class="btn active">{{pageNumber}}</a>
+    {{else}}
+      <a href="/api/products?limit=10&page={{pageNumber}}" class="btn">{{pageNumber}}</a>
     {{/if}}
-    {{#if hasNextPage}}
-      <a href="{{nextLink}}" class="btn">Siguiente</a>
-    {{/if}}
-  </div>
+  {{/each}}
+
+  {{#if hasNextPage}}
+    <a href="{{nextLink}}" class="btn">Siguiente</a>
+  {{/if}}
+</div>
+
 {{else}}
   <p>No hay productos disponibles.</p>
 {{/if}}

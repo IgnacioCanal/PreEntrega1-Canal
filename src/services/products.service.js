@@ -2,11 +2,11 @@ import Product from '../models/Products.js';
 
 export class ProductsService {
   async getAll(filter = {}, options = {}) {
-      const { limit = 10, skip = 0, sort = null } = options;
+      const { limit = 10, skip = 0, sort } = options;
       return await Product.find(filter)
           .limit(limit)
           .skip(skip)
-          .sort(sort);
+          .sort(sort || {});
   }
 
   async countDocuments(filter = {}) {
@@ -30,9 +30,9 @@ export class ProductsService {
           nombre,
           precio: parseFloat(precio),
           stock: parseInt(stock),
-          descripción: 'Sin descripción',
-          código: Date.now().toString(),
-          categoría: 'Sin categoría'
+          descripcion: 'Sin descripción',
+          codigo: Date.now().toString(),
+          categoria: 'Sin categoría'
       });
       return await product.save();
   }

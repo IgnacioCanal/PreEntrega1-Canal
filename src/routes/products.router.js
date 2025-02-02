@@ -41,7 +41,7 @@ productsRouter.get("/", async (req, res) => {
       sort: sort ? { precio: sort === 'asc' ? 1 : -1 } : null
   };
 
-  const filter = query ? { categoría: query } : {};
+  const filter = query ? { categoria: query } : {};
 
   try {
       const products = await productsService.getAll(filter, options);

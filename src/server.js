@@ -4,6 +4,7 @@ import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import handlebars from "express-handlebars";
+import exphbs from "express-handlebars";
 import connectDB from "./config/mongodb.js";
 
 import { __dirname } from "./dirname.js";
@@ -19,14 +20,17 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.resolve(__dirname, "../public")));
 
-app.engine(
-  "hbs",
-  handlebars.engine({
-    extname: ".hbs",
-    layoutsDir: path.join(__dirname, "views", "layout"),
-    partialsDir: path.join(__dirname, "views", "partials"),
-  })
-);
+const hbs = exphbs.create({
+  extname: ".hbs",
+  layoutsDir: path.join(__dirname, "views", "layout"),
+  partialsDir: path.join(__dirname, "views", "partials"),
+  runtimeOptions: {
+    allowProtoPropertiesByDefault: true,
+    allowProtoMethodsByDefault: true,
+  },
+});
+
+app.engine("hbs", hbs.engine);
 app.set("view engine", "hbs");
 app.set("views", path.join(__dirname, "views"));
 
