@@ -2,7 +2,7 @@ import Product from '../models/Products.js';
 
 export class ProductsService {
   async getAll(filter = {}, options = {}) {
-      const { limit = 10, skip = 0, sort } = options;
+      const {page = 1, limit = 10, skip = 0, sort } = options;
       return await Product.find(filter)
           .limit(limit)
           .skip(skip)

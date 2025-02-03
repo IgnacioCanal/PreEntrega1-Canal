@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { productsService } from "../services/products.service.js";
 import { io } from "../server.js";
+import  Product  from "../models/Products.js";
 
 export const productsRouter = Router();
 
@@ -44,7 +45,7 @@ productsRouter.get("/", async (req, res) => {
   const filter = query ? { categoria: query } : {};
 
   try {
-      const products = await productsService.getAll(filter, options);
+      const products = await Product.paginate(filter, options);
       const totalProducts = await productsService.countDocuments(filter);
       const totalPages = Math.ceil(totalProducts / limit);
 
