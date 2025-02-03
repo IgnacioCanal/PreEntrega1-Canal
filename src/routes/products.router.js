@@ -5,9 +5,9 @@ import  Product  from "../models/Products.js";
 
 export const productsRouter = Router();
 
-const validateProductFields = (product) => {
+const validateProductFields = (Product) => {
   const { nombre, descripcion, stock, codigo, categoria, precio, status } =
-    product;
+    Product;
 
   if (
     !nombre ||
@@ -35,37 +35,43 @@ const validateProductFields = (product) => {
 };
 
 productsRouter.get("/", async (req, res) => {
-  const { limit = 10, page = 1, sort, query } = req.query;
-  const options = {
-      limit: parseInt(limit),
-      skip: (parseInt(page) - 1) * parseInt(limit),
-      sort: sort ? { precio: sort === 'asc' ? 1 : -1 } : null
-  };
-
-  const filter = query ? { categoria: query } : {};
-
   try {
-      const products = await Product.paginate(filter, options);
-      const totalProducts = await productsService.countDocuments(filter);
-      const totalPages = Math.ceil(totalProducts / limit);
+    const { limit = 10, page = 1, sort, query } = req.query;
 
-      res.status(200).json({
-          status: 'success',
-          payload: products,
-          totalPages,
-          prevPage: page > 1 ? parseInt(page) - 1 : null,
-          nextPage: page < totalPages ? parseInt(page) + 1 : null,
-          page: parseInt(page),
-          hasPrevPage: page > 1,
-          hasNextPage: page < totalPages,
-          prevLink: page > 1 ? `/api/products?limit=${limit}&page=${parseInt(page) - 1}&sort=${sort}&query=${query}` : null,
-          nextLink: page < totalPages ? `/api/products?limit=${limit}&page=${parseInt(page) + 1}&sort=${sort}&query=${query}` : null
-      });
+    const filter = query ? { categoria: query } : {};
+
+    const options = {
+      page: parseInt(page), 
+      limit: parseInt(limit),
+      sort: sort ? { price: sort === 'asc' ? 1 : -1 } : {}, 
+    };
+
+    const products = await Product.paginate(filter, options);
+    console.log("Productos sin paginar:", products);
+
+    console.log("Filter usado:", filter);
+    console.log("Options usadas:", options);
+    console.log("Resultado paginación:", products);
+
+    res.status(200).json({
+      status: "success",
+      payload: products.docs, // Solo los productos
+      totalPages: products.totalPages,
+      prevPage: products.prevPage,
+      nextPage: products.nextPage,
+      page: products.page,
+      hasPrevPage: products.hasPrevPage,
+      hasNextPage: products.hasNextPage,
+      prevLink: products.hasPrevPage ? `/api/products?page=${products.prevPage}&limit=${limit}&sort=${sort}&query=${query}` : null,
+      nextLink: products.hasNextPage ? `/api/products?page=${products.nextPage}&limit=${limit}&sort=${sort}&query=${query}` : null
+    });
+
   } catch (error) {
-      console.error("Error al obtener los productos:", error.message);
-      res.status(500).json({ error: "Error al obtener los productos" });
+    console.error("Error al obtener los productos:", error.message);
+    res.status(500).json({ error: "Error al obtener los productos" });
   }
 });
+
 
 productsRouter.get("/:productId", async (req, res) => {
   const { productId } = req.params;
