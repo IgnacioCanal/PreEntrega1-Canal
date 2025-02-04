@@ -1,9 +1,9 @@
 <h1>Lista de Productos</h1>
 
-{{#if products.length}}
+{{#if products.docs.length}}
   <p>Página {{page}} de {{totalPages}}</p>
   <div class="row">
-    {{#each products}}
+    {{#each products.docs}}
       <div class="col s12 m6 l4">
         <div class="card small">
           <div class="card-title center-align bold">
