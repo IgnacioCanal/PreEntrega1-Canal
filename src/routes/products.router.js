@@ -48,9 +48,11 @@ productsRouter.get("/", async (req, res) => {
 
     const products = await Product.paginate(filter, options);
 
+    console.log("Productos obtenidos:", products); 
+
     res.status(200).json({
       status: "success",
-      payload: products, 
+      payload: products.docs, 
       totalPages: products.totalPages,
       prevPage: products.prevPage,
       nextPage: products.nextPage,

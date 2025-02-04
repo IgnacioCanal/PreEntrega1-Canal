@@ -3,7 +3,7 @@ const socket = io();
 socket.on("actualizarProductos", (products) => {
   const lista = document.getElementById("lista-productos");
   lista.innerHTML = "";
-  products.forEach((product) => {
+  products.docs.forEach((product) => {
     const item = document.createElement("li");
     item.textContent = `Nombre: ${product.nombre} - Precio: $${product.precio} - Stock: ${product.stock}`;
     lista.appendChild(item);

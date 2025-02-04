@@ -22,23 +22,26 @@
     {{/each}}
   </div>
 
-  <div class="pagination">
-  {{#if hasPrevPage}}
-    <a href="{{prevLink}}" class="btn">Anterior</a>
-  {{/if}}
-
-  {{#each totalPages as |pageNumber|}}
-    {{#if (eq ../page pageNumber)}}
-      <a href="/api/products?limit=10&page={{pageNumber}}" class="btn active">{{pageNumber}}</a>
-    {{else}}
-      <a href="/api/products?limit=10&page={{pageNumber}}" class="btn">{{pageNumber}}</a>
-    {{/if}}
-  {{/each}}
-
-  {{#if hasNextPage}}
-    <a href="{{nextLink}}" class="btn">Siguiente</a>
-  {{/if}}
-</div>
+  <div class="position-relative m-4">
+    <ul class="pagination">
+      {{#if products.docs.hasPrevPage}}
+        <li class="page-item">
+          <a
+            class="page-link"
+            href="/?page={{products.docs.prevPage}}&&limit=5"
+          >
+            Previous
+          </a>
+        </li>
+      {{/if}}
+      {{#if products.docs.hasNextPage}}
+        <li class="page-item"><a
+            class="page-link"
+            href="/?page={{products.docs.nextPage}}&&limit=5"
+          >Next</a></li>
+      {{/if}}
+    </ul>
+  </div>
 
 {{else}}
   <p>No hay productos disponibles.</p>
