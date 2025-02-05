@@ -9,7 +9,8 @@ export class CartService {
 
   async getCartById(cartId) {
     try {
-      return await Cart.findById(cartId).populate("products.product");
+      const cart = await Cart.findById(cartId).populate("products.product");
+        return cart;
     } catch (error) {
       console.error("Error al obtener carrito:", error);
       throw new Error("Error al obtener carrito");
@@ -51,6 +52,22 @@ export class CartService {
       throw new Error("Error al agregar producto al carrito");
     }
   }
+
+  async updateProductQuantity(cartId, productId, quantity) {
+    try {
+        const cart = await this.getCartById(cartId);
+        const productInCart = cart.products.find(p => p.product.equals(productId));
+        if (!productInCart) {
+            return { error: "Producto no encontrado en el carrito" };
+        }
+        productInCart.quantity = quantity;
+        await cart.save();
+        return cart;
+    } catch (error) {
+        throw new Error("Error al actualizar la cantidad del producto");
+    }
+}
+
 
   async removeProductFromCart(cartId, productId) {
     try {

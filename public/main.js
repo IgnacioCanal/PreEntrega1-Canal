@@ -50,3 +50,56 @@ document.getElementById("form-eliminar").addEventListener("submit", (e) => {
   socket.emit("eliminarProducto", { nombre, currentPage });
   e.target.reset();
 });
+
+
+async function addToCart(productId) {
+  try {
+    let cartId = getCartFromLocalStorage();
+    if (!cart) {
+      cart = createNewCart();
+    }
+
+    const response = await fetch(`/carts/${cartId}/products/${productId}`, {
+      method: 'POST',
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log('Producto agregado al carrito:', data);
+      cart.products.push({ productId, quantity: 1 });
+      saveCartToLocalStorage(cart);
+      alert('Producto agregado al carrito');
+    } else {
+      const error = await response.json();
+      alert('Error al agregar el producto al carrito: ' + error.message);
+    }
+  } catch (error) {
+    console.error('Error al agregar al carrito:', error);
+    alert('Error al agregar el producto al carrito');
+  }
+}
+
+
+function getCartFromLocalStorage() {
+  const cart = localStorage.getItem('cart');
+  return cart ? JSON.parse(cart) : null;
+}
+
+function saveCartToLocalStorage(cart) {
+  localStorage.setItem('cart', JSON.stringify(cart));
+}
+
+function createNewCart() {
+  const newCart = {
+    cartId: generateCartId(),
+    products: []
+  };
+  saveCartToLocalStorage(newCart);
+  return newCart;
+}
+
+
+function generateCartId() {
+  return 'cart-' + Date.now();
+}
+
