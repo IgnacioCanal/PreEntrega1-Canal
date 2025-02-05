@@ -1,12 +1,9 @@
-import Product from "../models/Products.js";
+import { Product } from "../models/Products.js";
 
 export class ProductsService {
-  async getAll(filter = {}, options = {}) {
-    const { page = 1, limit = 10 } = options;
-    return await Product.paginate(filter, {
-      page: Number(page),
-      limit: Number(limit),
-    });
+  async getAll(page , limit) {
+    return await Product.paginate( {}, { page: Number(page), limit: Number(limit) }
+    );
   }
 
   async countDocuments(filter = {}) {

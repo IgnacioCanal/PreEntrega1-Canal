@@ -14,7 +14,24 @@
     {{/each}}
   </ul>
 </div>
-
+<div class="position-relative m-4">
+    <ul class="pagination">
+      {{#if products.hasPrevPage}}
+        <li class="page-item">
+          <a class="page-link" href="/realtimeproducts?page={{products.prevPage}}&&limit=10">Previous</a>
+        </li>
+      {{/if}}
+      {{#if products.hasNextPage}}
+        <li class="page-item">
+          <a class="page-link" href="/realtimeproducts?page={{products.nextPage}}&&limit=10">Next</a>
+        </li>
+      {{/if}}
+    </ul>
+    <p class="btn btn-primary">
+      Current Page:
+      {{products.page}}
+    </p>
+  </div>
 <h2 class="section-title center-align">Agregar Producto</h2>
 
 <form id="form-agregar" class="col s12">

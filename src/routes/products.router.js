@@ -1,7 +1,6 @@
 import { Router } from "express";
 import { productsService } from "../services/products.service.js";
 import { io } from "../server.js";
-import Product from "../models/Products.js";
 
 export const productsRouter = Router();
 
@@ -36,36 +35,9 @@ const validateProductFields = (Product) => {
 
 productsRouter.get("/", async (req, res) => {
   try {
-    const { limit = 10, page = 1, sort, query } = req.query;
+    const products = await productsService.getAll();
 
-    const filter = {};
-
-    const options = {
-      page: parseInt(page),
-      limit: parseInt(limit),
-      sort: sort ? { price: sort === "asc" ? 1 : -1 } : {},
-    };
-
-    const products = await Product.paginate(filter, options);
-
-    console.log("Productos obtenidos:", products); 
-
-    res.status(200).json({
-      status: "success",
-      payload: products.docs, 
-      totalPages: products.totalPages,
-      prevPage: products.prevPage,
-      nextPage: products.nextPage,
-      page: products.page,
-      hasPrevPage: products.hasPrevPage,
-      hasNextPage: products.hasNextPage,
-      prevLink: products.hasPrevPage
-        ? `/api/products?page=${products.prevPage}&limit=${limit}&sort=${sort}&query=${query}`
-        : null,
-      nextLink: products.hasNextPage
-        ? `/api/products?page=${products.nextPage}&limit=${limit}&sort=${sort}&query=${query}`
-        : null,
-    });
+    res.status(200).json(products);
   } catch (error) {
     console.error("Error al obtener los productos:", error.message);
     res.status(500).json({ error: "Error al obtener los productos" });
