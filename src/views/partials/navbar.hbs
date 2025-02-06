@@ -1,10 +1,17 @@
 <nav>
   <div class="nav-wrapper">
     <a href="#" class="brand-logo right">Victornillo Ferretería</a>
-    <ul id="nav-mobile" class="left hide-on-med-and-down">
+    <a href="#" data-target="mobile-nav" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <ul id="nav-mobile" class="left hide-on-small-and-down">
       <li><a href="/">Lista de Productos</a></li>
       <li><a href="/realtimeproducts">Productos en Tiempo Real</a></li>
-      <li><a href="/cart">Carrito ({{cartCount}})</a></li>
+      <li><a href="/cart">Carrito (<span id="cart-count">{{cartCount}}</span>)</a></li>
     </ul>
   </div>
 </nav>
+
+<ul class="sidenav" id="mobile-nav">
+  <li><a href="/">Lista de Productos</a></li>
+  <li><a href="/realtimeproducts">Productos en Tiempo Real</a></li>
+  <li><a href="/cart">Carrito (<span id="cart-count">{{cartCount}}</span>)</a></li>
+</ul>

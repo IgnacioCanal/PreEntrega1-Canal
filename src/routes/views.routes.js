@@ -26,3 +26,20 @@ viewsRoutes.get("/realtimeproducts", async (req, res) => {
     res.status(500).json({ error: "Error al obtener los productos" });
   }
 });
+
+viewsRoutes.get("/cart", (req, res) => {
+ 
+  const cart = [
+    { product: { nombre: "Martillo", precio: 200 }, quantity: 1 },
+    { product: { nombre: "Serrucho", precio: 150 }, quantity: 2 },
+  ];
+
+
+  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
+
+
+  res.render("cart", {
+    cartCount, 
+    products: cart,
+  });
+});

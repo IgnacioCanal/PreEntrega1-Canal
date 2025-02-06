@@ -45,7 +45,7 @@ cartsRouter.post("/", async (req, res) => {
 
 cartsRouter.post("/:cartId/products/:productId", async (req, res) => {
   const { cartId, productId } = req.params;
-  
+
   const cart = await cartService.getCartById(cartId);
   if (!cart) {
     return res.status(404).json({ error: "Carrito no encontrado" });
@@ -78,12 +78,18 @@ cartsRouter.put("/:cartId/products/:productId", async (req, res) => {
   const { cartId, productId } = req.params;
   const { quantity } = req.body;
   if (!Number.isInteger(quantity) || quantity < 1) {
-    return res.status(400).json({ error: "La cantidad debe ser un número entero positivo" });
+    return res
+      .status(400)
+      .json({ error: "La cantidad debe ser un número entero positivo" });
   }
   try {
-    const updatedCart = await cartService.updateProductQuantity(cartId, productId, quantity);
+    const updatedCart = await cartService.updateProductQuantity(
+      cartId,
+      productId,
+      quantity
+    );
     if (updatedCart.error) {
-        return res.status(404).json({ error: updatedCart.error });
+      return res.status(404).json({ error: updatedCart.error });
     }
     res.json(updatedCart);
   } catch (error) {
@@ -112,16 +118,9 @@ cartsRouter.delete("/:cartId", async (req, res) => {
   const { cartId } = req.params;
 
   try {
-      const cart = await cartService.getCartById(cartId);
-      if (!cart) {
-          return res.status(404).json({ error: "Carrito no encontrado" });
-      }
-
-      cart.products = [];
-      await cart.save();
-      res.json({ message: "Todos los productos eliminados del carrito", cart });
+    const clearedCart = await cartService.clearCart(cartId);
+    res.json({ message: "Todos los productos eliminados del carrito", clearedCart });
   } catch (error) {
-      res.status(500).json({ error: "Error al eliminar productos del carrito" });
+    res.status(500).json({ error: "Error al eliminar productos del carrito" });
   }
 });
-
