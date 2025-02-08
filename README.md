@@ -2,67 +2,57 @@
 
 ## Descripción
 
-Preentrega2-CANAL es una aplicación para la gestión de productos y carritos de compras. Permite a los usuarios realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre productos y carritos. Además, ofrece funcionalidades avanzadas como la visualización dinámica de productos con Handlebars (HBS), y la comunicación en tiempo real entre los usuarios mediante WebSockets y Socket.io. Con estas tecnologías, la aplicación se actualiza automáticamente en tiempo real, mejorando la experiencia del usuario sin necesidad de recargar la página. Todo esto está construido con Node.js, Express, WebSockets, y Socket.io, proporcionando una experiencia más dinámica y fluida en el manejo de productos y carritos de compra.
+**Preentrega2-CANAL** es una aplicación para la gestión de productos y carritos de compras, creada con **Node.js**, **Express**, y **Socket.io**. Permite realizar operaciones CRUD (Crear, Leer, Actualizar, Eliminar) sobre productos y carritos. Además, se incorpora una experiencia interactiva con **WebSockets**, actualizando la interfaz de usuario en tiempo real sin necesidad de recargar la página.
 
+La aplicación utiliza **Handlebars (HBS)** para renderizar las vistas de productos de forma dinámica, mejorando el rendimiento y la experiencia del usuario. La integración de **Socket.io** facilita la sincronización en tiempo real de los productos y carritos entre todos los usuarios conectados, permitiendo un entorno de compra más fluido.
 
 ## Características
 
-- **Gestión de Productos**:
-  - Crear nuevos productos.
-  - Listar todos los productos.
-  - Obtener detalles de un producto específico.
-  - Actualizar productos existentes.
-  - Eliminar productos.
+### **Gestión de Productos**
+- **Crear productos**: Permite agregar nuevos productos al catálogo.
+- **Listar productos**: Muestra todos los productos disponibles en el inventario.
+- **Actualizar productos**: Modifica las características de un producto existente.
+- **Eliminar productos**: Elimina un producto del inventario.
 
-- **Gestión de Carritos**:
-  - Crear nuevos carritos.
-  - Listar todos los carritos.
-  - Obtener detalles de un carrito específico.
-  - Agregar productos a un carrito.
-  - Eliminar productos de un carrito.
+### **Gestión de Carritos**
+- **Crear carritos**: Permite la creación de nuevos carritos de compra.
+- **Listar carritos**: Muestra todos los carritos de compra existentes.
+- **Ver detalles de un carrito**: Visualiza el contenido de un carrito específico.
+- **Agregar productos al carrito**: Permite añadir productos al carrito de compras.
+- **Eliminar productos del carrito**: Elimina productos específicos del carrito.
 
+### **Nuevas Funcionalidades**
 
-### Nuevas Funcionalidades
+#### **Visualización Dinámica de Productos con Handlebars (HBS)**
+- La aplicación utiliza **Handlebars (HBS)** para renderizar las vistas de productos de manera eficiente. Las vistas se actualizan dinámicamente, lo que mejora el rendimiento y la experiencia interactiva del usuario.
 
-**Visualización Dinámica de Productos con Handlebars (HBS)**  
-- La aplicación utiliza Handlebars (HBS) para renderizar las vistas de productos de manera dinámica. Los productos se muestran de manera eficiente en el navegador, facilitando una experiencia interactiva.
+#### **Comunicación en Tiempo Real con WebSockets y Socket.io**
+- Se ha implementado **Socket.io** para permitir la sincronización en tiempo real entre los productos y los carritos de compra. Cualquier cambio realizado por un usuario se refleja automáticamente en todos los usuarios conectados, sin necesidad de recargar la página.
 
-**WebSockets y Socket.io para Comunicación en Tiempo Real**  
-- Se implementó WebSocket y Socket.io para habilitar la actualización en tiempo real de la lista de productos, carritos y otros cambios, lo que permite a los usuarios recibir información sin tener que recargar la página.
+#### **Interacción en Tiempo Real con Sincronización de Carritos**
+- Los cambios en los carritos (como agregar o eliminar productos) se actualizan en tiempo real para todos los usuarios conectados, proporcionando una experiencia de compra fluida.
 
-**Vistas Dinámicas con Handlebars**  
-- Las vistas de los productos y carritos ahora están renderizadas de manera eficiente con Handlebars (HBS), mejorando el rendimiento y la experiencia del usuario al interactuar con la tienda online.
-
-**Interacción en Tiempo Real**  
-- Gracias a Socket.io, los carritos y los productos se sincronizan en tiempo real. Cualquier cambio realizado por un usuario se refleja de inmediato en otros usuarios conectados.
-
+#### **Carritos Dinámicos en el Navegador**
+- La lista de carritos está disponible en el **navbar** de la aplicación, con la posibilidad de ver la cantidad de productos de cada carrito en un menú desplegable, lo que permite gestionar múltiples carritos de manera intuitiva.
 
 ## Endpoints
 
-### Productos
+### **Productos**
+- **GET** `/api/products`: Lista todos los productos.
+- **GET** `/api/products/:productId`: Obtiene los detalles de un producto específico.
+- **POST** `/api/products`: Crea un nuevo producto.
+- **PUT** `/api/products/:productId`: Actualiza un producto existente.
+- **DELETE** `/api/products/:productId`: Elimina un producto.
 
-- **GET** `/api/products` - Lista todos los productos.
-- **GET** `/api/products/:productId` - Obtiene los detalles de un producto específico.
-- **POST** `/api/products` - Crea un nuevo producto.
-- **PUT** `/api/products/:productId` - Actualiza un producto existente.
-- **DELETE** `/api/products/:productId` - Elimina un producto.
-
-### Carritos
-
-- **GET** `/api/carts` - Lista todos los carritos.
-- **GET** `/api/carts/:cartId` - Obtiene los detalles de un carrito específico.
-- **POST** `/api/carts` - Crea un nuevo carrito.
-- **POST** `/api/carts/:cartId/products/:productId` - Agrega un producto al carrito.
-- **DELETE** `/api/carts/:cartId/products/:productId` - Elimina un producto del carrito.
+### **Carritos**
+- **GET** `/api/carts`: Lista todos los carritos.
+- **GET** `/api/carts/:cartId`: Obtiene los detalles de un carrito específico.
+- **POST** `/api/carts`: Crea un nuevo carrito.
+- **POST** `/api/carts/:cartId/products/:productId`: Agrega un producto a un carrito.
+- **DELETE** `/api/carts/:cartId/products/:productId`: Elimina un producto de un carrito.
 
 ## Uso
 
-Para probar los endpoints, puedes usar la herramienta Postman.
+Para probar los endpoints de la API, puedes usar herramientas como **Postman** o realizar las peticiones desde el frontend.
 
-## Contacto
 
-Para cualquier consulta o sugerencia, puedes contactarme a través de [mi perfil de GitHub](https://github.com/IgnacioCanal).
-
----
-
-¡Gracias por usar Preentrega1-CANAL! 🎉
