@@ -76,7 +76,6 @@ io.on("connection", (socket) => {
   });
 });
 
-// Iniciar servidor
 server.listen(8080, () => {
   console.log("Server running on port http://localhost:8080");
 });

@@ -7,6 +7,8 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
   </head>
   <body>
     {{> navbar}}
@@ -25,5 +27,19 @@
     </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/main.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const cartLinks = document.querySelectorAll('a[href="/cart"]');
+        const cartData = localStorage.getItem("cart");
+        if (cartData) {
+          const cartObj = JSON.parse(cartData);
+          cartLinks.forEach(link => {
+            link.href = `/cart/${cartObj._id}`;
+          });
+        }
+      });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
   </body>
 </html>

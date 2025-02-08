@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { productsService } from "../services/products.service.js";
+import  { cartService } from "../services/carts.service.js";
 
 export const viewsRoutes = Router();
 
@@ -27,19 +28,19 @@ viewsRoutes.get("/realtimeproducts", async (req, res) => {
   }
 });
 
-viewsRoutes.get("/cart", (req, res) => {
- 
-  const cart = [
-    { product: { nombre: "Martillo", precio: 200 }, quantity: 1 },
-    { product: { nombre: "Serrucho", precio: 150 }, quantity: 2 },
-  ];
+viewsRoutes.get("/cart/:cartId", async (req, res) => {
+  const { cartId } = req.params;
+  try {
+    const cart = await cartService.getCartById(cartId);
+    if (!cart) {
+      return res.status(404).json({ error: "Carrito no encontrado" });
+    }
 
+    const cartCount = cart.products.reduce((acc, item) => acc + item.quantity, 0);
 
-  const cartCount = cart.reduce((acc, item) => acc + item.quantity, 0);
-
-
-  res.render("cart", {
-    cartCount, 
-    products: cart,
-  });
+    res.render("cart", { cartCount, products: cart.products});
+  } catch (error) {
+    console.error("Error al obtener el carrito:", error.message);
+    res.status(500).json({ error: "Error al obtener el carrito" });
+  }
 });

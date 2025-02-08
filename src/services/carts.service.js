@@ -55,19 +55,26 @@ export class CartService {
 
   async updateProductQuantity(cartId, productId, quantity) {
     try {
-        const cart = await this.getCartById(cartId);
-        const productInCart = cart.products.find(p => p.product.equals(productId));
-        if (!productInCart) {
-            return { error: "Producto no encontrado en el carrito" };
-        }
-        productInCart.quantity = quantity;
-        await cart.save();
-        return cart;
-    } catch (error) {
-        throw new Error("Error al actualizar la cantidad del producto");
-    }
-}
+      const cart = await Cart.findById(cartId);
+      if (!cart) {
+        throw new Error("Carrito no encontrado");
+      }
 
+      const productIndex = cart.products.findIndex(
+        (item) => item.product.toString() === productId
+      );
+
+      if (productIndex === -1) {
+        throw new Error("Producto no encontrado en el carrito");
+      }
+
+      cart.products[productIndex].quantity = quantity;
+      return await cart.save();
+    } catch (error) {
+      console.error("Error al actualizar cantidad:", error);
+      throw new Error("Error al actualizar cantidad del producto");
+    }
+  }
 
   async removeProductFromCart(cartId, productId) {
     try {
@@ -98,29 +105,6 @@ export class CartService {
     } catch (error) {
       console.error("Error al actualizar carrito:", error);
       throw new Error("Error al actualizar carrito");
-    }
-  }
-
-  async updateProductQuantity(cartId, productId, quantity) {
-    try {
-      const cart = await Cart.findById(cartId);
-      if (!cart) {
-        throw new Error("Carrito no encontrado");
-      }
-
-      const productIndex = cart.products.findIndex(
-        (item) => item.product.toString() === productId
-      );
-
-      if (productIndex === -1) {
-        throw new Error("Producto no encontrado en el carrito");
-      }
-
-      cart.products[productIndex].quantity = quantity;
-      return await cart.save();
-    } catch (error) {
-      console.error("Error al actualizar cantidad:", error);
-      throw new Error("Error al actualizar cantidad del producto");
     }
   }
 
