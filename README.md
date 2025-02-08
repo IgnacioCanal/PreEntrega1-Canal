@@ -1,4 +1,4 @@
-# Preentrega2-CANAL
+# Proyecto Final Backend 1
 
 ## Descripción
 
