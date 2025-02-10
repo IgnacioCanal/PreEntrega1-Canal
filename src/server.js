@@ -3,7 +3,6 @@ import morgan from "morgan";
 import express from "express";
 import { createServer } from "http";
 import { Server } from "socket.io";
-import handlebars from "express-handlebars";
 import exphbs from "express-handlebars";
 import connectDB from "./config/mongodb.js";
 

@@ -203,6 +203,8 @@ function getCartCount() {
 
 }
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
   const resetCartBtn = document.getElementById("reset-cart-btn");
   if (resetCartBtn) {
@@ -340,5 +342,26 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+  var dropdownElems = document.querySelectorAll('.dropdown-trigger');
+  M.Dropdown.init(dropdownElems, {
+
+    constrainWidth: false,
+    coverTrigger: false
+  });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const dropdownLinks = document.querySelectorAll('#dropdown1 a[data-cartid]');
+  
+  dropdownLinks.forEach(link => {
+    link.addEventListener('click', (event) => {
+      const cartId = event.currentTarget.getAttribute('data-cartid');
+      localStorage.setItem("cart", JSON.stringify({ _id: cartId }));
+    });
+  });
+});
+
 
 updateCartCounter(getCartCount());

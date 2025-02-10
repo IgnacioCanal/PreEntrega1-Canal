@@ -1,5 +1,4 @@
 import Cart from "../models/Carts.js";
-import { Product } from "../models/Products.js";
 
 export class CartService {
   async createCart() {
@@ -122,5 +121,7 @@ export class CartService {
     }
   }
 }
+
+
 
 export const cartService = new CartService();
